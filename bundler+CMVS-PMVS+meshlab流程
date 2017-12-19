@@ -1,0 +1,20 @@
+以bundler中examples的kermit为例。
+1.cd至bundler/examples/kermit/
+2.运行创建稀疏点云的脚本
+../../RunBundler.sh
+之后会生成bundle文件夹和prepare文件夹，其中bundle/bundle.out存储了重建的稀疏点云与3D坐标和相机参数。
+3.接下来要把稀疏点云转换为即将输入CMVS-PMVS的格式，bundler/bin中的Bundle2PMVS可以做到这一点。
+../../bin/Bundle2PMVS prepare/list.txt bundle/bundle.out
+4.之后会生成pmvs目录，此目录下有prep_pmvs.sh文件，编辑此文件，将里面的BUNDLER_BIN_PATH修改为bunlder的bin文件夹的绝对路径。
+BUNDLER_BIN_PATH=/home/zhanghaoxu/3D_Reconstruction/bundler-v0.4-source/bin
+5.运行该脚本
+sh pmvs/prep_pmvs.sh
+6.运行以下命令
+../../bin/cmvs pmvs/
+../../bin/genOption pmvs/
+../../bin/pmvs2 pmvs/ option-0000
+7.稠密点云就存放在pmvs/models的option-0000.ply中，用meshlab打开即可看到。
+
+8.以上过程也可以自己拍照片进行重建，但需要得到照片参数，重建时bundler使用jhead读取照片信息，然后根据读取的相机型号从bin目录下的extract_focal.pl文件总读取ccd_widths，需要将自己的相机ccd_widths加入到extract_focal.pl文件中。
+
+更多参看http://blog.csdn.net/u013358387/article/details/71576660

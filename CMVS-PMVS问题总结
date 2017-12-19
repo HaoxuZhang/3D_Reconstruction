@@ -1,0 +1,14 @@
+1.安装CMVS-PMVS环境依赖
+sudo apt-get install libgtk2.0-dev libdevil-dev libboost-all-dev libatlas-cpp-0.6-dev libatlas-dev libcminpack-dev libgfortran3 libmetis-edf-dev libparmetis-dev freeglut3-dev libgsl0-dev
+
+2.从github上下载CMVS-PMVS
+git clone https://github.com/pmoulon/CMVS-PMVS.git
+
+3.对CMVS-PMVS进行编译
+cd至CMVS-PMVS/program/下
+输入下列命令
+mkdir build && cd build
+cmake ..
+make
+
+4.将生成的cmvs,genOption,pmvs2这三个可执行文件拷贝到bundler/bin下

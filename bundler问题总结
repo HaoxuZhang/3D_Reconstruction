@@ -1,0 +1,51 @@
+bundler可以将图片的特征进行匹配，得到稀疏点云，然后用PMVS/CMVS进行处理得到稠密点云。
+1.下载http://www.cs.cornell.edu/~snavely/bundler/
+2.解压后，进入其文件夹。
+3.参照其中的README.txt进行安装编译。但是在这其中，会出现一些错误，这里一一列出。
+编译时，主要是运行Makefile文件，在终端直接输入make命令即可。
+
+错误1：gcc: error trying to exec 'f951': execvp: No such file or directory
+原因：由于没有安装相应的gfortran package,gfortran是属于GCC的一部分，是一个编译器，缺少gfortran使得无法编译
+解决方案：sudo apt-get install gfortran
+
+
+错误2：BundlerApp.h:620:32: error: cannot call constructor ‘SkeletalApp::BundlerApp’ directly [-fpermissive]
+         BundlerApp::BundlerApp();
+原因：src文件夹中的BundlerApp.h出现错误，在第620行。
+解决方案：将文件中第620行的BundlerApp::BundlerApp()语句替换为BundlerApp()
+
+
+错误3：
+/usr/bin/ld: 找不到 -llapack
+/usr/bin/ld: 找不到 -lblas
+原因：没有安装LAPACK库和BLAS库。
+解决方案：
+（1）先安装LAPACK库，安装该库时会自动安装BLAS库，该库是用来做线性运算的。
+在www.netlib.org/lapack/下载LAPACK
+解压后进入其文件夹，打开终端，先对makefile文件进行修改，输入命令 sed -i '11s/apacklib tmglib/lblaslib lapacklib/g' Makefile，之后终端输入make命令编译文件
+编译后会生成三个库文件：liblapack.a librefblas.a libtmglib.a 用cp命令将这三个库文件拷贝至/usr/lib
+（2）如果仍然出现第二条错误，可以用以下方法：
+/usr/bin/ld :cannot find -lXXX
+这个错误可以直接简单暴力解决，直接apt-get install libXXX-dev即可
+
+
+其他安装：
+运行SIFT时，由于所给程序为32位，而我的机器为64位，因此需要如下方法：
+sudo apt-get install gcc-multilib
+sudo dpkg –add-architecture i386
+sudo apt-get update
+sudo apt-get install libc6:i386 libncurses5:i386 libstdc++6:i386
+
+其他可以参考：http://blog.csdn.net/whzyb1991/article/details/50286563
+
+####################################################################################################
+bunlder成功编译的标志为在其文件夹的bin中生成KeyMatchFull和bundler文件
+####################################################################################################
+
+其他步骤：
+1.运行bunlder之前需要SIFT特征提取，该部分也可以在bunlder中运行，先要在http://www.cs.ubc.ca/~lowe/keypoints/下载SIFT特征提取文件，解压后进入其文件夹终端运行make命令。然后将sift文件拷贝至bunlder文件的bin文件夹中。
+
+2.将bunlder文件夹中bin文件中的libANN_char.so 拷贝值/usr/lib中（或是/lib中）
+
+3.解决了上述问题后，可以直接在终端运行 ./RunBundler.sh imgdir（imagir代表图片所在路径），注意不能用bash来运行shell脚本，因为该脚本的语法格式是忽略空格的，而bash部忽略空格。之后可以得到稠密点云。
+
