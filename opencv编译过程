@@ -1,0 +1,50 @@
+参考：https://www.cnblogs.com/arkenstone/p/6490017.html
+
+1.安装opencv依赖
+$ sudo apt-get install build-essential
+$ sudo apt-get install cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+$ sudo apt-get install python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev # 处理图像所需的包
+$ sudo apt-get install libavcodec-dev libavformat-dev libswscale-dev libv4l-dev liblapacke-dev
+$ sudo apt-get install libxvidcore-dev libx264-dev # 处理视频所需的包
+$ sudo apt-get install libatlas-base-dev gfortran # 优化opencv功能
+$ sudo apt-get install ffmpeg
+
+2.下载opencv3.2.0（第一个是opencv,第二个是opencv_contrib,sift需要用到）
+$ wget https://github.com/opencv/opencv/archive/3.2.0.zip # 从github上直接下载或者clone也可
+$ wget https://github.com/opencv/opencv_contrib/archive/3.2.0.zip
+解压两个文件
+
+3.编译（非cuda）
+$ cd opencv-3.2.0
+$ mkdir build
+$ cd build
+$ cmake -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/home/zhanghaoxu/anaconda3/envs/tensorflow \
+    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D INSTALL_C_EXAMPLES=OFF \
+    -D OPENCV_EXTRA_MODULES_PATH=/home/zhanghaoxu/3D_Reconstruction1/opencv_contrib-3.2.0/modules \
+    -D PYTHON_EXCUTABLE=/home/zhanghaoxu/anaconda3/envs/tensorflow/bin/python \
+    -D WITH_TBB=ON \
+    -D WITH_V4L=ON \
+    -D WITH_QT=ON \    # 1
+    -D WITH_GTK=ON \
+    -D WITH_OPENGL=ON \
+    -D BUILD_EXAMPLES=ON .. # cmake命令的使用方式：cmake [<some optional parameters>] <path to the OpenCV source directory>。如果命令报错的话可以试着把-D后面的空格去掉在执行一次。
+$ make -j4
+$ sudo make install
+$ sudo /bin/bash -c 'echo "/home/fanzong/anaconda2/envs/tensorflow/lib" > /etc/ld.so.conf.d/opencv.conf'
+$ sudo ldconfig
+
+在以上过程中会出现的几个错误：
+1. qmake: could not exec '/usr/lib/x86_64-linux-gnu/qt4/bin/qmake': No such file or directory 
+解决方案：找到/usr/lib/x86_64-linux-gnu/qt-default/qtchooser文件夾，有一個default.conf 文件，內容如下：
+/usr/lib/x86_64-linux-gnu/qt4/bin
+/usr/lib/x86_64-linux-gnu
+将其第一行添加一句后，该文件变为以下：
+/home/Qt5.9.1/5.9.1/gcc_64/bin
+/usr/lib/x86_64-linux-gnu/qt4/bin
+/usr/lib/x86_64-linux-gnu
+保存退出
+
+2.Found unsuitable Qt version "5.9.1" from /usr/bin/qmake, this code requires Qt 4.x
+解决方案：sudo apt-get install qt4-default
