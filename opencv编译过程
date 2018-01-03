@@ -19,14 +19,14 @@ $ cd opencv-3.2.0
 $ mkdir build
 $ cd build
 $ cmake -D CMAKE_BUILD_TYPE=RELEASE \
-    -D CMAKE_INSTALL_PREFIX=/home/zhanghaoxu/anaconda3/envs/tensorflow \
+    -D CMAKE_INSTALL_PREFIX=/usr \
     -D INSTALL_PYTHON_EXAMPLES=ON \
     -D INSTALL_C_EXAMPLES=OFF \
     -D OPENCV_EXTRA_MODULES_PATH=/home/zhanghaoxu/3D_Reconstruction1/opencv_contrib-3.2.0/modules \
-    -D PYTHON_EXCUTABLE=/home/zhanghaoxu/anaconda3/envs/tensorflow/bin/python \
+    -D PYTHON_EXCUTABLE=/usr/bin/python \
     -D WITH_TBB=ON \
     -D WITH_V4L=ON \
-    -D WITH_QT=ON \    # 1
+    -D WITH_QT=ON \
     -D WITH_GTK=ON \
     -D WITH_OPENGL=ON \
     -D BUILD_EXAMPLES=ON .. # cmake命令的使用方式：cmake [<some optional parameters>] <path to the OpenCV source directory>。如果命令报错的话可以试着把-D后面的空格去掉在执行一次。
@@ -34,6 +34,9 @@ $ make -j4
 $ sudo make install
 $ sudo /bin/bash -c 'echo "/home/fanzong/anaconda2/envs/tensorflow/lib" > /etc/ld.so.conf.d/opencv.conf'
 $ sudo ldconfig
+
+其中CMAKE_INSTALL_PREFIX为python的安装路径，可以用python -c "import sys; print sys.prefix" 来查看
+OPENCV_EXTRA_MODULES_PATH指定python路径
 
 在以上过程中会出现的几个错误：
 1. qmake: could not exec '/usr/lib/x86_64-linux-gnu/qt4/bin/qmake': No such file or directory 
