@@ -1,0 +1,16 @@
+1.可以直接查看.binvox格式的文件的网页，直接将文件拖上去即可。
+https://piyo56.github.io/simple_voxel_viewer/index.html
+附上其github网址
+https://github.com/piyo56/simple_voxel_viewer
+
+2.PASCAL 3D+ 数据集，其网页下方还有许多3D相关的数据集
+http://cvgl.stanford.edu/projects/pascal3d.html
+
+3.PASCAL VOC 数据集，用于目标检测。
+http://host.robots.ox.ac.uk/pascal/VOC/voc2012/index.html#devkit
+
+4.viewvox,用于读取.binvox文件的程序
+http://www.patrickmin.com/viewvox/
+
+5.读取.binvox格式的其他方法总结
+http://www.patrickmin.com/binvox/binvox.html
