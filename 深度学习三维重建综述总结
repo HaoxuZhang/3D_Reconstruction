@@ -1,0 +1,58 @@
+一.三维形状表达的方式：
+1.point cloud 点云，只用点来表达三维物体
+2.mesh 网格，将点连接起来使其变为网格平面
+3.NURBS Surface 参数化曲面表达
+4.curve networks 用线条网络表达三维形状
+5.signed distance field 二维用轮廓表达，三维用体素表达
+6.octree 八叉树 有曲面的地方将体素加密，无曲面的地方体素稀疏，从而节省空间
+7.depth maps 用深度图像表达
+8.normal maps 法向图，用于很多细节的平面，用不同颜色表示法向，从而通过不同颜色获得面上的细节
+9.geometry image 用两张图片（坐标图与法向量图）代表三维物体。
+上述很多都是将三维物体换作二维图片进行表达，原因是目前2D CNN 比较成熟，用二维信息表达三维信息可以适用于2D CNN网络。
+10.parametric space 参数化空间
+
+
+二.3D CNN三维神经网络怎么来提取feature
+1.Surface-1，在曲面上做定义邻域做卷积，但是比较困难，如何定义邻域是个问题
+相关论文：[3dRR 2015] Geodesic convolutional neural networks on Riemannian mainfolds
+
+2.Surface-2，图片适合卷积的原因是每个pixel代表一个值，而且图像是规范的长方形。那么如果三维物体用球面来规范化也能做卷积。但局限于三维物体跟球同胚
+相关论文：[SIGGRAPH 2017] Conwolutional Neural Networks on Surfaces via Seamless Toric Covers
+
+3.Graph(mesh)，在网格上提取网格中相邻图形，这个图形可以用来做卷积。
+相关论文：[CVPR 2017 Spotlight] SyncSpecCNN: Synchronized Specral CNN for 3D Shape Segmentation
+
+4.Point Cloud, 用点云来做神经网络
+相关论文：[CVPR 2017 Oral] PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation
+
+5.Voxels, 二维图片的规整性使得容易做卷积，那么三维空间也可以用长方体来规范化，用体素来表示三维物体，这样也比较容易做卷积。由于三维卷积消耗大量内存，论文中只用了32^3的空间，这样的空间导致分辨率很低。
+相关论文：[IROS 2015] VoxNet: A 3D Convolutional Neural Network for Real-Time Object Recognition
+
+6.Octree, 用八叉树表达一个high resolution的空间，可以提高分辨率，即有物体的地方用稠密体素表达，没有物体的地方用稀疏体素。
+相关论文：[SIGGRAPH 2017] O-CNN: Octree-based Convolutional Neural Networks for 3D Shape Analysis
+
+7.Geometry Image, 把三维形状用geometry image二维图像表达，这样可以直接用2D-CNN来进行深度学习
+相关论文：[ECCV 2016] Deep Learning 3D Shape Surfaces Using Geometry Images
+
+8.Multi-View Images, 用一个物体的多视角图片，将每张图片输入到CNN提取features最后将features结合起来
+相关论文：[ICCV 2015] Multi-view Convolutional Neural Networks for 3D Shape Recognition
+
+
+
+
+三.用生成网络进行三维重建
+1.Voxels，输入多张图片输出voxels
+相关论文：[ICCV 2015] Multi-view Convolutional Neural Networks for 3D Shape Recognition
+
+2.Octree，输入一张图像输出体素，但这种体素是八叉树形式的，这样可以达到比较高的精度。
+相关论文：[Arxiv 2017] Octree Generating Networks: Efficient Convolutional Architectures for High-resolution 3D Outputs
+
+3.Point Cloud，图像输入网络直接得到点云表达
+相关论文：[CVPR 2017 Oral] A Point Set Generation Network for 3D Object Reconstruction from a Single Image
+
+4.Geometry Image，用geometry image来decoder出三维数据
+相关论文：[CVPR 2017] SurfNet: Generating 3D shape surfaces using deep residual networks
+
+5.Depth maps，用深度图输入到神经网络中做三维重建
+相关论文：[CVPR 2017] Synthesizing 3D Shapes via Modeling Multi-View Depth Maps and Silhouettes with Deep Generative Networks
+
